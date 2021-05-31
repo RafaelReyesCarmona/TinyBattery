@@ -1,0 +1,33 @@
+#########################################
+# Syntax Coloring Map For ACS712_Hall
+#########################################
+
+#########################################
+# Datatypes (KEYWORD1)
+#########################################
+
+ACS712	KEYWORD1
+ACS712_type KEYWORD1
+
+#########################################
+# Methods and Functions (KEYWORD2)
+#########################################
+
+setADC	KEYWORD2
+setEMA  KEYWORD2
+analogRef KEYWORD2
+getCurrent_DC	KEYWORD2
+getCurrent_DC_LowNoise  KEYWORD2
+getCurrent_AC	KEYWORD2
+
+#########################################
+# Instances (KEYWORD2)
+#########################################
+
+#########################################
+# Constants (LITERAL1)
+#########################################
+
+ACS712_05B	LITERAL1
+ACS712_20A	LITERAL1
+ACS712_30A	LITERAL1

@@ -1,79 +1,120 @@
-///
-/// @file Battery_Library.cpp
-/// @author Alix ANNERAUD (alix.anneraud@outlook.fr)
-/// @brief Battery management library source file.
-/// @version 0.1.0
-/// @date 21/05/2020
-///
-/// @copyright Copyright (c) 2021
-///
+/*
+TinyBattery.cpp - Ligth Library for Arduino Enveroment to Battery management.
+v0.1
 
-#include "Battery_Library.hpp"
+Copyright © 2021 Francisco Rafael Reyes Carmona.
+All rights reserved.
 
-Battery_Class::Battery_Class(uint8_t Sensing_Pin, uint16_t Minimum_Voltage, uint16_t Maximum_Voltage, float Resistor_1, float Resistor_2)
-    : Sensing_Pin(Sensing_Pin),
-      Minimum_Voltage(Minimum_Voltage),
-      Maximum_Voltage(Maximum_Voltage)
-{
-    // Calculate conversion factor (maximum output voltage of the voltage divider)
-    Set_Resistors(Resistor_1, Resistor_2);
+rafael.reyes.carmona@gmail.com
 
-    pinMode(Sensing_Pin, INPUT);
+
+  This file is part of TinyBattery Library.
+
+  TinyBattery Library is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  TinyBattery Library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with TinyBattery Library.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+/**
+ * Ligth Library for Arduino Enveroment to Battery management.
+ */
+
+#include "TinyBattery.h"
+
+TinyBattery::TinyBattery(byte PIN,
+                         float VREF,
+                         long RESISTOR_VDD,
+                         long RESISTOR_GND,
+                         float MIN_VOLT,
+                         float MAX_VOLT) {
+  _PIN = PIN;
+  _VREF = VREF;
+  _MIN_V = MIN_VOLT;
+  _MAX_V = MAX_VOLT;
+
+  // Calculate conversion factor (maximum output voltage of the voltage divider)
+  _FACTOR = RESISTOR_VDD + RESISTOR_GND;
+  _FACTOR /= RESISTOR_GND;
+
+  pinMode(_PIN, INPUT);
 }
 
-Battery_Class::Battery_Class(uint8_t Sensing_Pin, uint16_t Minimum_Voltage, uint16_t Maximum_Voltage, float Conversion_Factor)
-    : Sensing_Pin(Sensing_Pin),
-      Conversion_Factor(Conversion_Factor),
-      Minimum_Voltage(Minimum_Voltage),
-      Maximum_Voltage(Maximum_Voltage)
-{
-    // Calculate conversion factor (maximum output voltage of the voltage divider)
 
-    pinMode(Sensing_Pin, INPUT);
+TinyBattery::TinyBattery(byte PIN,
+                         float VREF,
+                         float MIN_VOLT,
+                         float MAX_VOLT,
+                         float FACTOR) {
+  _PIN = PIN;
+  _VREF = VREF;
+  _MIN_V = MIN_VOLT;
+  _MAX_V = MAX_VOLT;
+  _FACTOR = FACTOR;
+
+  pinMode(_PIN, INPUT);
 }
 
-Battery_Class::Battery_Class()
-    : Sensing_Pin(0xFF),
-      Conversion_Factor(0),
-      Minimum_Voltage(0),
-      Maximum_Voltage(0)
-{
+
+float TinyBattery::GetVoltage() {
+  return ((((float)analogRead(_PIN) * _VREF) / _ADC_MAX) * _FACTOR);
 }
 
-Battery_Class::~Battery_Class()
+byte TinyBattery::GetChargeLevel(byte numsamples)
 {
-}
-
-uint16_t Battery_Class::Get_Voltage()
-{
-    if (Sensing_Pin == 0xFF)
-    {
-        return 0;
+    if (_MAX_V - _MIN_V == 0.0) {
+      return 0;
     }
-    return (((analogRead(Sensing_Pin) * 3200) / 4096) * Conversion_Factor);
+
+    float Current_Level = GetVoltage();
+
+    for (byte i = numsamples; i--; ) {
+      Current_Level = (_alphaEMA_LOW * GetVoltage()) + ((1.0 - _alphaEMA_LOW) * Current_Level);
+    }
+
+    Current_Level -= _MIN_V;
+    Current_Level *= 100;
+    Current_Level /= (_MAX_V - _MIN_V);
+    if (Current_Level > 100.0){
+      Current_Level = 100;
+    }
+    return (byte)Current_Level;
 }
 
-uint8_t Battery_Class::Get_Charge_Level()
-{
-    if (Maximum_Voltage - Minimum_Voltage == 0 || Sensing_Pin == 0xFF)
-    {
-        return 0;
-    }
 
-    uint32_t Current_Level = 0;
+void TinyBattery::setEMA(float EMA){
+  _alphaEMA_LOW = EMA;
+}
 
-    for (uint8_t i = 0; i < 10; i++)
-    {
-        Current_Level += analogRead(Sensing_Pin);
-    }
 
-    Current_Level /= 10;
-    Current_Level = ((Current_Level * 3200) / 4096 * Conversion_Factor);
-    Current_Level -= Minimum_Voltage;
-    Current_Level = (Current_Level / ((Maximum_Voltage - Minimum_Voltage) / 100));
-    if (Current_Level > 100)
-    {
-        Current_Level = 100;
-    }
-    return Current_Level;
+void TinyBattery::setADC(int ADC_MAX){
+  _ADC_MAX = ADC_MAX;
+}
+
+void TinyBattery::analogRef(uint8_t mode){
+analogReference(mode);
+switch (mode) {
+  #if defined(__LGT8F__)
+  case INTERNAL1V024:
+    _VREF = 1.024;
+    break;
+  case INTERNAL2V048:
+    _VREF = 2.048;
+    break;
+  case INTERNAL4V096:
+    _VREF = 4.096;
+    break;
+  #endif
+  case DEFAULT:
+    break;
+  }
 }
