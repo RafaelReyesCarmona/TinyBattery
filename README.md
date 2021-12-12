@@ -59,7 +59,7 @@ pio lib search TinyBattery
 
 2. Type for install:
 ```
-pio lib install ______
+pio lib install 13266
 ```
 
 --- or ---
