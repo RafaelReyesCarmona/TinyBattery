@@ -38,7 +38,7 @@ rafael.reyes.carmona@gmail.com
 class TinyBattery {
   private:
     #if defined(__LGT8F__)
-      int _ADC_MAX = 4096;  //ADC max. value (4093) + 1 -> 4096. But it will be 4069 by design.
+      int _ADC_MAX = 4096;  //ADC max. value (4095) + 1 -> 4096. But it will be 4069 by design.
     #elif defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega328__)
       int _ADC_MAX = 1024;  //ADC max. value (1023) + 1 -> 1024.
     #else
