@@ -1,5 +1,5 @@
 /*
-TinyBattery.cpp - Ligth Library for Arduino Enveroment to Battery management.
+TinyBattery.cpp - Ligth Library for Arduino Environment to Battery management.
 v0.1
 
 Copyright © 2021 Francisco Rafael Reyes Carmona.

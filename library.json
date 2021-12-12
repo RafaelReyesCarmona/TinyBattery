@@ -3,7 +3,7 @@
 	"version": "0.1",
 	"license": "GPL-3.0-or-later",
 	"keywords": "battery, voltage",
-	"description": "Ligth Library for Arduino Enveroment to Battery management.",
+	"description": "Ligth Library for Arduino Environment to Battery management.",
 	"authors":
 	[
 		{
