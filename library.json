@@ -1,6 +1,6 @@
 {
 	"name": "TinyBattery",
-	"version": "0.2",
+	"version": "0.2.1",
 	"license": "GPL-3.0-or-later",
 	"keywords": "battery, voltage",
 	"description": "Ligth Library for Arduino Environment to Battery management.",
@@ -28,7 +28,7 @@
 	],
 	"dependencies":
 	{
-		"rafaelreyescarmona/EMA": "*",
-		"rafaelreyescarmona/ADC": "*"
+		"rafaelreyescarmona/EMA": "^0.1.1",
+		"rafaelreyescarmona/ADC": "^0.1.1"
 	}
 }

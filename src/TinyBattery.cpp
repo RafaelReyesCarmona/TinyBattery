@@ -1,6 +1,6 @@
 /*
 TinyBattery.cpp - Ligth Library for Arduino Environment to Battery management.
-v0.2
+v0.2.1
 
 Copyright © 2021 Francisco Rafael Reyes Carmona.
 All rights reserved.
@@ -99,16 +99,16 @@ byte TinyBattery::GetChargeLevel()
     if (_MAX_V - _MIN_V == 0.0) {
       return 0;
     }
-
+    int Level;
     float Current_Level = GetVoltage_LowNoise();
 
     Current_Level -= _MIN_V;
     Current_Level *= 100;
     Current_Level /= (_MAX_V - _MIN_V);
-    if (Current_Level > 100.0){
-      Current_Level = 100;
-    }
-    return (byte)Current_Level;
+
+    Level = (int)Current_Level;
+    constrain(Level, 0, 100);
+    return (byte)Level;
 }
 
 

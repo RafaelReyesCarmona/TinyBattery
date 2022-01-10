@@ -3,7 +3,7 @@
 # TinyBattery
 
 [![Library: TinyBattery](https://img.shields.io/badge/Library-TinyBattery-red?style=for-the-badge&logo=arduino)](README.md)
-[![Version: v0.2](https://img.shields.io/badge/Version-v0.2-blue?style=for-the-badge&logo=v)]()
+[![Version: v0.2.1](https://img.shields.io/badge/Version-v0.2.1-blue?style=for-the-badge&logo=v)]()
 
 Ligth Library for Arduino Environment to Battery management.
 

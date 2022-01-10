@@ -1,6 +1,6 @@
 /*
 TinyBattery.ino - Ligth Library for Arduino Environment to Battery management.
-v0.1
+v0.2.1
 
 Copyright © 2021 Francisco Rafael Reyes Carmona.
 All rights reserved.
