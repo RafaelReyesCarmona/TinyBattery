@@ -1,6 +1,6 @@
 /*
 TinyBattery.cpp - Ligth Library for Arduino Environment to Battery management.
-v0.1
+v0.2
 
 Copyright © 2021 Francisco Rafael Reyes Carmona.
 All rights reserved.
@@ -30,6 +30,8 @@ rafael.reyes.carmona@gmail.com
  */
 
 #include "TinyBattery.h"
+#include <EMA.h>
+#include <ADC.h>
 
 TinyBattery::TinyBattery(byte PIN,
                          float VREF,
@@ -64,22 +66,41 @@ TinyBattery::TinyBattery(byte PIN,
   pinMode(_PIN, INPUT);
 }
 
+float TinyBattery::GetVoltage(){
+  uint16_t ADC_filtered;
+  uint16_t pVal;
+  static EMA<3> EMA_filter(analogRead(_PIN));
 
-float TinyBattery::GetVoltage() {
-  return ((((float)analogRead(_PIN) * _VREF) / _ADC_MAX) * _FACTOR);
+  pVal = analogRead(_PIN);
+
+  ADC_filtered = EMA_filter(pVal);
+
+  return ((((float)ADC_filtered * _VREF) / (float)_ADC_MAX) * _FACTOR);
+  }
+
+float TinyBattery::GetVoltage_LowNoise() {
+  uint8_t PORT = _PIN - A0;
+  uint16_t ADC_filtered;
+  uint16_t pVal;
+
+  ADMUX &= 0xE0;  // Clear Port setting 0 MUX0..3.
+  ADMUX |= PORT;  // Setting Port for read ADC.
+
+  static EMA<3> EMA_filter(adcGet_());  
+  pVal = adcGet_();
+  
+  ADC_filtered = EMA_filter(pVal);
+
+  return ((((float)ADC_filtered * _VREF) / (float)_ADC_MAX) * _FACTOR);
 }
 
-byte TinyBattery::GetChargeLevel(byte numsamples)
+byte TinyBattery::GetChargeLevel()
 {
     if (_MAX_V - _MIN_V == 0.0) {
       return 0;
     }
 
-    float Current_Level = GetVoltage();
-
-    for (byte i = numsamples; i--; ) {
-      Current_Level = (_alphaEMA_LOW * GetVoltage()) + ((1.0 - _alphaEMA_LOW) * Current_Level);
-    }
+    float Current_Level = GetVoltage_LowNoise();
 
     Current_Level -= _MIN_V;
     Current_Level *= 100;
@@ -88,11 +109,6 @@ byte TinyBattery::GetChargeLevel(byte numsamples)
       Current_Level = 100;
     }
     return (byte)Current_Level;
-}
-
-
-void TinyBattery::setEMA(float EMA){
-  _alphaEMA_LOW = EMA;
 }
 
 

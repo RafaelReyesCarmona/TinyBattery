@@ -1,6 +1,6 @@
 /*
 TinyBattery.h - Ligth Library for Arduino Environment to Battery management.
-v0.1
+v0.2
 
 Copyright © 2021 Francisco Rafael Reyes Carmona.
 All rights reserved.
@@ -50,20 +50,19 @@ class TinyBattery {
     float _MIN_V;
     float _MAX_V;
 
-    float _alphaEMA_LOW = 0.91;
-
   public:
     TinyBattery(byte, float, long, long, float, float);
     TinyBattery(byte, float, float, float, float);
     TinyBattery() = delete;
     TinyBattery(const TinyBattery&) = delete;
 
-    byte GetChargeLevel(byte numsamples = F_CPU/1000000);
+    byte GetChargeLevel();
     float GetVoltage();
+    float GetVoltage_LowNoise();
 
     void setADC(int);
-    void setEMA(float);
     void analogRef(uint8_t mode);
+    void setVref(float Vref){_VREF = Vref;};
 
 };
 

@@ -1,6 +1,6 @@
 {
 	"name": "TinyBattery",
-	"version": "0.1",
+	"version": "0.2",
 	"license": "GPL-3.0-or-later",
 	"keywords": "battery, voltage",
 	"description": "Ligth Library for Arduino Environment to Battery management.",
@@ -19,11 +19,16 @@
 		"url": "https://github.com/RafaelReyesCarmona/TinyBattery.git"
 	},
 	"frameworks": [
-	  "arduino"
+		"arduino"
 	],
 	"platforms": [
-	  "atmelavr",
+		"atmelavr",
 		"lgt8f",
-	  "teensy"
-	]
+		"teensy"
+	],
+	"dependencies":
+	{
+		"rafaelreyescarmona/EMA": "*",
+		"rafaelreyescarmona/ADC": "*"
+	}
 }

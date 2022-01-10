@@ -13,7 +13,6 @@ TinyBattery	KEYWORD1
 #########################################
 
 setADC	KEYWORD2
-setEMA  KEYWORD2
 analogRef KEYWORD2
 GetVoltage	KEYWORD2
 GetChargeLevel  KEYWORD2

@@ -2,9 +2,14 @@
 
 # TinyBattery
 
+[![Library: TinyBattery](https://img.shields.io/badge/Library-TinyBattery-red?style=for-the-badge&logo=arduino)](README.md)
+[![Version: v0.2](https://img.shields.io/badge/Version-v0.2-blue?style=for-the-badge&logo=v)]()
+
 Ligth Library for Arduino Environment to Battery management.
 
 ## Installation ##
+
+This library need EMA.h library (https://github.com/RafaelReyesCarmona/EMA) and ADC.h library (https://github.com/RafaelReyesCarmona/EMA). 
 
 ### Arduino IDE ###
 
@@ -59,7 +64,7 @@ pio lib search TinyBattery
 
 2. Type for install:
 ```
-pio lib install 13266
+pio lib install ______
 ```
 
 --- or ---
