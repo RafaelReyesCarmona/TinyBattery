@@ -69,7 +69,7 @@ TinyBattery::TinyBattery(byte PIN,
 float TinyBattery::GetVoltage(){
   uint16_t ADC_filtered;
   uint16_t pVal;
-  static EMA<3> EMA_filter(analogRead(_PIN));
+  static EMA<2> EMA_filter(analogRead(_PIN));
 
   pVal = analogRead(_PIN);
 
@@ -86,7 +86,7 @@ float TinyBattery::GetVoltage_LowNoise() {
   ADMUX &= 0xE0;  // Clear Port setting 0 MUX0..3.
   ADMUX |= PORT;  // Setting Port for read ADC.
 
-  static EMA<3> EMA_filter(adcGet_());  
+  static EMA<2> EMA_filter(adcGet_());  
   pVal = adcGet_();
   
   ADC_filtered = EMA_filter(pVal);
